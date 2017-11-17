@@ -79,7 +79,7 @@ public class EditActivity extends Activity {
         mChatService = new BTChatService(context , mHandler);
 
         if(remoteDeviceInfo!=null) {         // set BT in cliet mode
-            Log.d(TAG, "BT Cliet mode");
+            Log.d(TAG, "BT Client mode");
             dataTextView.append("BT module in Client mode. \n");
             String deviceMsg = remoteDeviceInfo.substring(10) ;
             Log.d(TAG, deviceMsg);

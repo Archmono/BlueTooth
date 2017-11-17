@@ -147,7 +147,6 @@ public class BTChatService {
 
                     switch (btState) {
                         case STATE_WaitingConnecting:
-
                         case STATE_CONNECTING:
                             device = btSocket.getRemoteDevice();
 
@@ -209,17 +208,17 @@ public class BTChatService {
         public ConnectedThread(BluetoothSocket socket){
             btSocket = socket;
             InputStream tmpIn = null;
-            OutputStream tmpOut = null;
+            OutputStream tmoOut = null;
 
             try {
                 tmpIn = socket.getInputStream();
-                tmpOut = socket.getOutputStream();
+                tmoOut = socket.getOutputStream();
             } catch (IOException e) {
 
             }
 
             btInputStream = tmpIn;
-            btOutputStream = tmpOut;
+            btOutputStream = tmoOut;
             btState = STATE_CONNECTED;
         }
 
