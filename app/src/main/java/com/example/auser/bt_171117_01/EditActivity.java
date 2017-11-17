@@ -19,10 +19,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 
 import static java.lang.String.valueOf;
 
@@ -79,7 +77,7 @@ public class EditActivity extends Activity {
         mChatService = new BTChatService(context , mHandler);
 
         if(remoteDeviceInfo!=null) {         // set BT in cliet mode
-            Log.d(TAG, "BT Client mode");
+            Log.d(TAG, "BT Cliet mode");
             dataTextView.append("BT module in Client mode. \n");
             String deviceMsg = remoteDeviceInfo.substring(10) ;
             Log.d(TAG, deviceMsg);

@@ -147,6 +147,7 @@ public class BTChatService {
 
                     switch (btState) {
                         case STATE_WaitingConnecting:
+
                         case STATE_CONNECTING:
                             device = btSocket.getRemoteDevice();
 
