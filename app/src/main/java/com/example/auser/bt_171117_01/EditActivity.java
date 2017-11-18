@@ -19,8 +19,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 
 import static java.lang.String.valueOf;
 
@@ -121,14 +123,14 @@ public class EditActivity extends Activity {
     private TextView.OnEditorActionListener textEditListen = new TextView.OnEditorActionListener(){
         //  EditorInfo.IME_NULL if being called due to the enter key being pressed
         public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-            Log.d(TAG, "enter key check : "+valueOf(actionId));
+           Log.d(TAG, "enter key check : "+valueOf(actionId));
 
-            if (actionId == EditorInfo.IME_ACTION_DONE ) {
+           if (actionId == EditorInfo.IME_ACTION_DONE ) {
                 Log.d(TAG, "enter key pressed");
                 String message = textView.getText().toString();
                 dataTextView.append(">> " + message + "\n");     //display on TextView
                 sendMessage(message);
-                // clear the edit text field
+               // clear the edit text field
                 sendEdit.setText("");
             }
             return true;
@@ -159,77 +161,67 @@ public class EditActivity extends Activity {
 
     }
 
-
     private void sendMessage(String message){
 
         int mState = mChatService.getState();
-        Log.d(TAG, "btState in sendMessage = " +valueOf(mState));
+        Log.d(TAG, "btState in sendMessage = " + valueOf(mState));
 
         if(mState != BTChatService.STATE_CONNECTED){
-            Toast.makeText(context, "Bluetooth device is not connected. ", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Bluetooth device is not connected.", Toast.LENGTH_SHORT).show();
             return;
         } else {
-            if(message.length() >0){
+            if(message.length() > 0){
                 byte[] send = message.getBytes();
                 mChatService.BTWrite(send);
             }
-
         }
-
     }
 
-    private  final Handler mHandler= new Handler(){
-
+    private final Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
 
             switch (msg.what){
 
-                case  Constants.MESSAGE_READ:
-                    byte[]  readBuf = (byte[]) msg.obj;
+                case Constants.MESSAGE_READ:
+                    byte[] readBuf = (byte[]) msg.obj;
 
                     String readMessage = new String(readBuf, 0, msg.arg1);
-                    dataTextView.append("remote :" + readMessage + "\n");
+                    dataTextView.append("remote : " + readMessage + "\n");
                     break;
-
-                case  Constants.MESSAGE_DEVICE_NAME:
+                case Constants.MESSAGE_DEVICE_NAME:
                     mConnectedDevice = msg.getData().getString(Constants.DEVICE_NAME);
-                    Toast.makeText(context, "connected to " +mConnectedDevice, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "connected to " + mConnectedDevice, Toast.LENGTH_SHORT).show();
                     break;
-
                 case Constants.MESSAGE_TOAST:
-                    Toast.makeText(context,msg.getData().getString(Constants.TOAST), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, msg.getData().getString(Constants.TOAST), Toast.LENGTH_SHORT).show();
                     break;
             }
-
-
         }
     };
 
-
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu){
         super.onCreateOptionsMenu(menu);
         menu.add(groupMenuID, File_1, menu.NONE, "Send File 1");
         menu.add(groupMenuID, File_2, menu.NONE, "Send File 2");
-        return  true;
-
+        return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item){
 
-        InputStream   inputFile=null;
-        InputStreamReader  fileChar;
-        StringBuilder  fileBuffer = new StringBuilder();
+        InputStream inputFile = null;
+        InputStreamReader fileChar;
+        StringBuilder fileBuffer = new StringBuilder();
         char[] buffer = new char[200];
 
         if(item.getGroupId() == groupMenuID){
 
-            switch ( item.getItemId()){
+            switch (item.getItemId()){
                 case File_1:
-                    Toast.makeText(context,"Send file 1", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Send file 1", Toast.LENGTH_SHORT).show();
                     try{
                         inputFile = context.getResources().openRawResource(R.raw.file_1);
                         fileChar = new InputStreamReader(inputFile, "UTF-8");
@@ -241,7 +233,7 @@ public class EditActivity extends Activity {
                         sendMessage(message);
 
                     } catch (Exception e) {
-                        Log.d(TAG, "Read File 1 failed" +e);
+                        Log.d(TAG, "Read File 1 failed" + e);
                     } finally {
                         try{
                             if (inputFile != null) inputFile.close();
@@ -249,11 +241,10 @@ public class EditActivity extends Activity {
 
                         }
                     }
-
                     break;
 
                 case File_2:
-                    Toast.makeText(context,"Send file 2", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Send file 2", Toast.LENGTH_SHORT).show();
                     try{
                         inputFile = context.getResources().openRawResource(R.raw.file_2);
                         fileChar = new InputStreamReader(inputFile, "UTF-8");
@@ -265,7 +256,7 @@ public class EditActivity extends Activity {
                         sendMessage(message);
 
                     } catch (Exception e) {
-                        Log.d(TAG, "Read File 2 failed" +e);
+                        Log.d(TAG, "Read File 2 failed" + e);
                     } finally {
                         try{
                             if (inputFile != null) inputFile.close();
@@ -273,14 +264,12 @@ public class EditActivity extends Activity {
 
                         }
                     }
-
                     break;
             }
-
-
 
         }
 
         return super.onOptionsItemSelected(item);
     }
+
 }
